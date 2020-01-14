@@ -2,14 +2,19 @@
   "name": "Guya MD/NH Proxy",
   "description": "Redirects to the Guya proxy",
   "version": "1.0",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "tabs"],
   "background": {
     "scripts": ["script.js"],
     "persistent": false
   },
   "browser_action": {
     "default_title": "Redirect to Guya proxy",
-    "default_icon": "logo_small.png"
+    "default_icon": "logo.png"
+  },
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
   },
   "manifest_version": 2
 }

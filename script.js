@@ -16,6 +16,23 @@ let execute = (offset, path) => {
   });
 };
 
+let updateIcon = (tabId) => {
+  chrome.tabs.get(tabId, tab => {
+    if (
+      tab.url.includes("mangadex.org/title") ||
+      (tab.url.includes("nhentai.net/g") &&
+        tab.url
+          .split("/")
+          .filter(e => e)
+          .slice(-2)[0] === "g")
+    ) {
+      chrome.browserAction.setIcon({ path: "logo_small.png" });
+    } else {
+      chrome.browserAction.setIcon({ path: "logo_small_bw.png" });
+    }
+  });
+}
+
 chrome.browserAction.onClicked.addListener(tab => {
   if (tab.url.includes("mangadex") && tab.url.includes("/title/")) {
     execute(2, MD_PROXY);
@@ -29,4 +46,12 @@ chrome.browserAction.onClicked.addListener(tab => {
       execute(1, NH_PROXY);
     }
   }
+});
+
+chrome.tabs.onUpdated.addListener(tabId => {
+  updateIcon(tabId);
+});
+
+chrome.tabs.onActivated.addListener(info => {
+  updateIcon(info.tabId);
 });
