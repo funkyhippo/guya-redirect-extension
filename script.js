@@ -3,8 +3,10 @@ const BASE_URL = "";
 const MD_PROXY = "md_proxy/";
 const NH_PROXY = "nh_proxy/";
 
+const ctx = chrome || browser;
+
 let execute = (offset, path) => {
-  chrome.tabs.executeScript({
+  ctx.tabs.executeScript({
     code: `
       let number = document.location.pathname
         .split("/")
@@ -17,7 +19,7 @@ let execute = (offset, path) => {
 };
 
 let updateIcon = (tabId) => {
-  chrome.tabs.get(tabId, tab => {
+  ctx.tabs.get(tabId, tab => {
     if (
       tab.url.includes("mangadex.org/title") ||
       (tab.url.includes("nhentai.net/g") &&
@@ -26,14 +28,14 @@ let updateIcon = (tabId) => {
           .filter(e => e)
           .slice(-2)[0] === "g")
     ) {
-      chrome.browserAction.setIcon({ path: "logo_small.png" });
+      ctx.browserAction.setIcon({ path: "logo_small.png" });
     } else {
-      chrome.browserAction.setIcon({ path: "logo_small_bw.png" });
+      ctx.browserAction.setIcon({ path: "logo_small_bw.png" });
     }
   });
 }
 
-chrome.browserAction.onClicked.addListener(tab => {
+ctx.browserAction.onClicked.addListener(tab => {
   if (tab.url.includes("mangadex") && tab.url.includes("/title/")) {
     execute(2, MD_PROXY);
   } else if (tab.url.includes("nhentai") && tab.url.includes("/g/")) {
@@ -48,10 +50,10 @@ chrome.browserAction.onClicked.addListener(tab => {
   }
 });
 
-chrome.tabs.onUpdated.addListener(tabId => {
+ctx.tabs.onUpdated.addListener(tabId => {
   updateIcon(tabId);
 });
 
-chrome.tabs.onActivated.addListener(info => {
+ctx.tabs.onActivated.addListener(info => {
   updateIcon(info.tabId);
 });

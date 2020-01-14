@@ -4,8 +4,7 @@
   "version": "1.0",
   "permissions": ["activeTab", "tabs"],
   "background": {
-    "scripts": ["script.js"],
-    "persistent": false
+    "scripts": ["script.js"]
   },
   "browser_action": {
     "default_title": "Redirect to Guya proxy",
