@@ -5,39 +5,43 @@ const NH_PROXY = "nh_proxy/";
 
 const ctx = chrome || browser;
 
-let execute = (offset, path) => {
+let execute = (prefix, path) => {
   ctx.tabs.executeScript({
     code: `
-      let number = document.location.pathname
+      let path = document.location.pathname
         .split("/")
-        .filter(e => e)
-        .slice(-${offset})[0];
+        .filter(e => e);
+      let number = path[path.indexOf("${prefix}") + 1];
       let url = "${BASE_URL}" + "${path}" + number + "/";
       window.location.href = url;
     `
   });
 };
 
-let updateIcon = (tabId) => {
-  ctx.tabs.get(tabId, tab => {
-    if (
-      tab.url.includes("mangadex.org/title") ||
-      (tab.url.includes("nhentai.net/g") &&
-        tab.url
-          .split("/")
-          .filter(e => e)
-          .slice(-2)[0] === "g")
-    ) {
-      ctx.browserAction.setIcon({ path: "logo_small.png" });
-    } else {
-      ctx.browserAction.setIcon({ path: "logo_small_bw.png" });
-    }
-  });
-}
+let updateIcon = tabId => {
+  try {
+    ctx.tabs.get(tabId, tab => {
+      if (
+        tab.url.includes("mangadex.org/title") ||
+        (tab.url.includes("nhentai.net/g") &&
+          tab.url
+            .split("/")
+            .filter(e => e)
+            .slice(-2)[0] === "g")
+      ) {
+        ctx.browserAction.setIcon({ path: "logo_small.png" });
+      } else {
+        ctx.browserAction.setIcon({ path: "logo_small_bw.png" });
+      }
+    });
+  } catch (e) {
+    ctx.browserAction.setIcon({ path: "logo_small_bw.png" });
+  }
+};
 
 ctx.browserAction.onClicked.addListener(tab => {
   if (tab.url.includes("mangadex") && tab.url.includes("/title/")) {
-    execute(2, MD_PROXY);
+    execute("title", MD_PROXY);
   } else if (tab.url.includes("nhentai") && tab.url.includes("/g/")) {
     if (
       tab.url
@@ -45,7 +49,7 @@ ctx.browserAction.onClicked.addListener(tab => {
         .filter(e => e)
         .slice(-2)[0] === "g"
     ) {
-      execute(1, NH_PROXY);
+      execute("g", NH_PROXY);
     }
   }
 });
