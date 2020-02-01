@@ -1,9 +1,9 @@
 # Installation
 
-Change `BASE_URL` to the URL for the proxy, and the routes for `MD_PROXY` and `NH_PROXY` (these probably don't need to change). For example, if an MD listing is `https://example.com/read/md_proxy/{series_id}/`, then:
+Change `BASE_URL` to the proxy's base, without a leading slash.
 
 ```javascript
-const BASE_URL = "https://example.com/read/";
+const BASE_URL = "https://example.com";
 ```
 
 Next, go to your Chrome [extensions](chrome://extensions) page and enable developer mode (at the top right). That should reveal three new options, `Load unpacked`, `Pack extension`, and `Update`.
