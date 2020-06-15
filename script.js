@@ -2,15 +2,20 @@ const BASE_URL = "https://guya.moe";
 
 const ctx = chrome || browser;
 
-let updateIcon = tabId => {
-  ctx.tabs.get(tabId, tab => {
+let allowed_url_list = [
+  "mangadex.org/title",
+  "mangadex.org/manga",
+  "mangadex.org/chapter",
+  "nhentai.net/g",
+  "imgur.com/a",
+];
+
+let updateIcon = (tabId) => {
+  ctx.tabs.get(tabId, (tab) => {
     if (!ctx.runtime.lastError) {
       try {
         if (
-          tab.url.includes("mangadex.org/title") ||
-          tab.url.includes("mangadex.org/manga") ||
-          tab.url.includes("mangadex.org/chapter") ||
-          tab.url.includes("nhentai.net/g")
+          allowed_url_list.some((allowed_url) => tab.url.includes(allowed_url))
         ) {
           ctx.browserAction.setIcon({ path: "logo_small.png" });
         } else {
@@ -23,25 +28,20 @@ let updateIcon = tabId => {
   });
 };
 
-ctx.browserAction.onClicked.addListener(tab => {
-  if (
-    tab.url.includes("mangadex.org/title") ||
-    tab.url.includes("mangadex.org/manga") ||
-    tab.url.includes("mangadex.org/chapter") ||
-    tab.url.includes("nhentai.net/g")
-  ) {
+ctx.browserAction.onClicked.addListener((tab) => {
+  if (allowed_url_list.some((allowed_url) => tab.url.includes(allowed_url))) {
     ctx.tabs.executeScript({
       code: `
         window.location.href = "${BASE_URL}" + document.location.pathname;
-      `
+      `,
     });
   }
 });
 
-ctx.tabs.onUpdated.addListener(tabId => {
+ctx.tabs.onUpdated.addListener((tabId) => {
   updateIcon(tabId);
 });
 
-ctx.tabs.onActivated.addListener(info => {
+ctx.tabs.onActivated.addListener((info) => {
   updateIcon(info.tabId);
 });
