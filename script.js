@@ -11,7 +11,7 @@ const allowed_url_list = [
   "imgur.com/a",
 ];
 
-const allowed_foolslide_list = [
+const tachiyomi_foolslide_list = [
   // %%FOOLSLIDE START%%
   "Silentskys-scans.net",
   "Storm-in-heaven.net",
@@ -53,7 +53,8 @@ const allowed_foolslide_list = [
   // %%FOOLSLIDE END%%
 ];
 
-// This is more for entries that one might want to override.
+// This is more for entries that one might want to keep regardless of what is on tachi, because
+// the scraper will erase any entry when updating.
 const override_foolslide_list = [];
 
 let updateIcon = (tabId) => {
@@ -64,7 +65,10 @@ let updateIcon = (tabId) => {
           allowed_url_list.some((allowed_url) =>
             tab.url.includes(allowed_url)
           ) ||
-          allowed_foolslide_list.some((allowed_url) =>
+          tachiyomi_foolslide_list.some((allowed_url) =>
+            tab.url.includes(allowed_url)
+          ) ||
+          override_foolslide_list.some((allowed_url) =>
             tab.url.includes(allowed_url)
           )
         ) {
@@ -87,7 +91,10 @@ ctx.browserAction.onClicked.addListener((tab) => {
       `,
     });
   } else if (
-    allowed_foolslide_list.some((allowed_url) => tab.url.includes(allowed_url))
+    tachiyomi_foolslide_list.some((allowed_url) =>
+      tab.url.includes(allowed_url)
+    ) ||
+    override_foolslide_list.some((allowed_url) => tab.url.includes(allowed_url))
   ) {
     ctx.tabs.executeScript({
       code: `
