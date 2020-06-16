@@ -16,7 +16,7 @@ def scrape_urls():
     FOOLSLIDE_EXTENSION_NAME = "all.foolslide"
 
     api_key = None
-    if os.path().exists(CONFIG_FILE_PATH):
+    if os.path.exists(CONFIG_FILE_PATH):
         with open(CONFIG_FILE_PATH) as f:
             api_key = json.load(f).get("key")
     else:
