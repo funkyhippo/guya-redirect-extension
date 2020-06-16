@@ -1,0 +1,47 @@
+name: "Update FS"
+
+# Runs at 6am every Sunday.
+on:
+  schedule:
+    - cron: "0 6 * * 0"
+
+# Horrible hack to manually trigger the action.
+# on:
+#   watch:
+#     types: [started]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
+
+      # Install deps and run updater
+      - name: Install dependencies
+        run: "pip3 install -r foolslide_scraper/requirements.txt"
+
+      - name: Run the updater
+        run: "python3 foolslide_scraper/scraper_replacer.py"
+        env:
+          SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
+
+      - name: Install npm dependencies
+        run: npm install --global prettier
+
+      - name: Format the file using Prettier
+        run: prettier --write ./script.js
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v2.8.0
+        with:
+          commit-message: "Actions: Update FS list"
+          title: Automatic FS Update
+          body: This is an automatic FS update for the extension.
+          branch: fs_update

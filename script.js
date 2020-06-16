@@ -1,8 +1,9 @@
 const BASE_URL = "https://guya.moe";
+const FS_URL = "https://guya.moe/fs";
 
 const ctx = chrome || browser;
 
-let allowed_url_list = [
+const allowed_url_list = [
   "mangadex.org/title",
   "mangadex.org/manga",
   "mangadex.org/chapter",
@@ -10,12 +11,66 @@ let allowed_url_list = [
   "imgur.com/a",
 ];
 
+const tachiyomi_foolslide_list = [
+  // %%FOOLSLIDE START%%
+  "Silentskys-scans.net",
+  "Storm-in-heaven.net",
+  "ajianoscantrad.fr",
+  "deathtollscans.net",
+  "evilflowers.com",
+  "faworeader.altervista.org",
+  "gtothegreatsite.net",
+  "helveticascans.com",
+  "hentai.cafe",
+  "hni-scantrad.com/eng/lel/",
+  "hni-scantrad.com/lel/",
+  "jaiminisbox.com",
+  "kangaryu-team.fr",
+  "kireicake.com",
+  "kirishimafansub.net",
+  "kobato.hologfx.com",
+  "leitura.baixarhentai.net",
+  "lupiteam.net",
+  "mabushimajo.com",
+  "mangascouts.org",
+  "mangatellers.gr",
+  "maryfaye.net",
+  "midnighthaven.shounen-ai.net",
+  "motokare.xyz",
+  "otscans.com",
+  "phantomreader.com",
+  "ramareader.it",
+  "read-nifteam.info",
+  "reader.powermanga.org",
+  "reader2.thecatscans.com",
+  "rusmanga.ru",
+  "sensescans.com",
+  "smuglo.li",
+  "tortuga-ceviri.com",
+  "tuttoanimemanga.net",
+  "yuri-ism.net/slide",
+  "zandynofansub.aishiteru.org",
+  // %%FOOLSLIDE END%%
+];
+
+// This is more for entries that one might want to keep regardless of what is on tachi, because
+// the scraper will erase any entry when updating.
+const override_foolslide_list = [];
+
 let updateIcon = (tabId) => {
   ctx.tabs.get(tabId, (tab) => {
     if (!ctx.runtime.lastError) {
       try {
         if (
-          allowed_url_list.some((allowed_url) => tab.url.includes(allowed_url))
+          allowed_url_list.some((allowed_url) =>
+            tab.url.includes(allowed_url)
+          ) ||
+          tachiyomi_foolslide_list.some((allowed_url) =>
+            tab.url.includes(allowed_url)
+          ) ||
+          override_foolslide_list.some((allowed_url) =>
+            tab.url.includes(allowed_url)
+          )
         ) {
           ctx.browserAction.setIcon({ path: "logo_small.png" });
         } else {
@@ -33,6 +88,17 @@ ctx.browserAction.onClicked.addListener((tab) => {
     ctx.tabs.executeScript({
       code: `
         window.location.href = "${BASE_URL}" + document.location.pathname;
+      `,
+    });
+  } else if (
+    tachiyomi_foolslide_list.some((allowed_url) =>
+      tab.url.includes(allowed_url)
+    ) ||
+    override_foolslide_list.some((allowed_url) => tab.url.includes(allowed_url))
+  ) {
+    ctx.tabs.executeScript({
+      code: `
+        window.location.href = "${FS_URL}" + "/" + document.location.href;
       `,
     });
   }
