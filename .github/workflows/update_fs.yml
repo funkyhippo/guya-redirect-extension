@@ -23,7 +23,7 @@ jobs:
 
     # Install deps and run updater
     - name: Install dependencies
-      run: 'pip install -r requirements.txt'
+      run: 'pip install -r foolslide_scraper/requirements.txt'
        
     - name: Run the updater
       run: 'python foolslide_scraper/scraper_replacer.py'
