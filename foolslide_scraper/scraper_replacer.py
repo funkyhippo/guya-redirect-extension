@@ -63,7 +63,7 @@ def replace_urls(fs_urls):
     FOOLSLIDE_END = "%%FOOLSLIDE END%%"
     to_write_lines = []
 
-    with open("../script.js") as script_file:
+    with open("./script.js") as script_file:
         lines = script_file.readlines()
 
         # First, let's delete anything that already exists...
