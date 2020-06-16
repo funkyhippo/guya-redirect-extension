@@ -36,4 +36,4 @@ jobs:
           commit-message: "Actions: Update FS list"
           title: Automatic FS Update
           body: This is an automatic FS update for the extension.
-          branch: master
+          branch: fs_update
