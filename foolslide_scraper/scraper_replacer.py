@@ -18,38 +18,43 @@ def scrape_urls():
     api_key = None
     with open(CONFIG_FILE_PATH) as f:
         api_key = json.load(f).get("key")
+    if api_key is None:
+        # Try grabbing from env
+        api_key = getenv("SHEETS_API_KEY")
         if api_key is None:
+            # Ya really messed up, where's your API key?
             raise Exception("Missing API key!")
-        params = {"key": api_key}
 
-        # First, let's get some data about the sheet overall to grab sheet names:
-        sheet_name_request = requests.get(SHEETS_BASE_URL + "/" + SHEET_ID, params=params)
-        if not sheet_name_request.ok:
-            raise Exception("Failed to get sheet names.")
-        sheet_names = [parse.quote_plus(sheet["properties"]["title"]) for sheet in sheet_name_request.json()["sheets"]]
+    params = {"key": api_key}
 
-        # Now get list of FS URLs
-        fs_urls = set()
-        for sheet_name in sheet_names:
-            print("Grabbing entries from %s" % sheet_name)
-            request = requests.get(
-                SHEETS_BASE_URL + "/" + SHEET_ID + "/values/" + sheet_name + "!" + SHEET_RANGE, params=params
-            )
-            if request.ok:
-                for entry in request.json()["values"]:
-                    if len(entry) >= 3 and entry[0] == FOOLSLIDE_EXTENSION_NAME and entry[1] != "Customizable":
-                        parse_result = parse.urlparse(entry[2])
-                        url = parse_result.path if parse_result.netloc == "" else parse_result.netloc
-                        if url.startswith("www."):
-                            url = url[4:]
-                        fs_urls.add('"' + url + '"')
-            else:
-                print("Failed to get entries from %s" % sheet_name)
+    # First, let's get some data about the sheet overall to grab sheet names:
+    sheet_name_request = requests.get(SHEETS_BASE_URL + "/" + SHEET_ID, params=params)
+    if not sheet_name_request.ok:
+        raise Exception("Failed to get sheet names.")
+    sheet_names = [parse.quote_plus(sheet["properties"]["title"]) for sheet in sheet_name_request.json()["sheets"]]
 
-        # print(fs_urls)
-        fs_urls = list(fs_urls)
-        fs_urls.sort()
-        return fs_urls
+    # Now get list of FS URLs
+    fs_urls = set()
+    for sheet_name in sheet_names:
+        print("Grabbing entries from %s" % sheet_name)
+        request = requests.get(
+            SHEETS_BASE_URL + "/" + SHEET_ID + "/values/" + sheet_name + "!" + SHEET_RANGE, params=params
+        )
+        if request.ok:
+            for entry in request.json()["values"]:
+                if len(entry) >= 3 and entry[0] == FOOLSLIDE_EXTENSION_NAME and entry[1] != "Customizable":
+                    parse_result = parse.urlparse(entry[2])
+                    url = parse_result.path if parse_result.netloc == "" else parse_result.netloc
+                    if url.startswith("www."):
+                        url = url[4:]
+                    fs_urls.add('"' + url + '"')
+        else:
+            print("Failed to get entries from %s" % sheet_name)
+
+    # print(fs_urls)
+    fs_urls = list(fs_urls)
+    fs_urls.sort()
+    return fs_urls
 
 
 def replace_urls(fs_urls):
