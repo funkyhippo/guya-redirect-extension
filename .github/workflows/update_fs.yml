@@ -20,6 +20,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-bet     
+        with:
+          node-version: '12'
 
       # Install deps and run updater
       - name: Install dependencies
@@ -30,11 +33,10 @@ jobs:
         env:
           SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
 
-      - name: Format the file using Prettier
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: '12'
+      - name: Install npm dependencies
         run: npm install --global prettier
+
+      - name: Format the file using Prettier
         run: prettier --write ./script.js
 
       - name: Create PR
