@@ -45,7 +45,7 @@ def scrape_urls():
             for entry in request.json()["values"]:
                 if len(entry) >= 3 and entry[0] == FOOLSLIDE_EXTENSION_NAME and entry[1] != "Customizable":
                     parse_result = parse.urlparse(entry[2])
-                    url = parse_result.path if parse_result.netloc == "" else parse_result.netloc
+                    url = (parse_result.path if parse_result.netloc == "" else parse_result.netloc).lower()
                     if url.startswith("www."):
                         url = url[4:]
                     fs_urls.add('"' + url + '"')
