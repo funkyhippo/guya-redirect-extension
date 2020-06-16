@@ -59,29 +59,33 @@ def scrape_urls():
 
 
 def replace_urls(fs_urls):
+    SCRIPT_FILE_PATH = "./script.js"
     FOOLSLIDE_START = "%%FOOLSLIDE START%%"
     FOOLSLIDE_END = "%%FOOLSLIDE END%%"
     to_write_lines = []
 
-    with open("./script.js") as script_file:
-        lines = script_file.readlines()
+    if os.path.exists(SCRIPT_FILE_PATH):
+        with open(SCRIPT_FILE_PATH) as script_file:
+            lines = script_file.readlines()
 
-        # First, let's delete anything that already exists...
-        ignoring_text = False
-        for line in lines:
-            if ignoring_text:
-                if FOOLSLIDE_END in line:
-                    ignoring_text = False
+            # First, let's delete anything that already exists...
+            ignoring_text = False
+            for line in lines:
+                if ignoring_text:
+                    if FOOLSLIDE_END in line:
+                        ignoring_text = False
+                        to_write_lines.append(line)
+                else:
                     to_write_lines.append(line)
-            else:
-                to_write_lines.append(line)
-                if FOOLSLIDE_START in line:
-                    ignoring_text = True
-                    for url in fs_urls:
-                        to_write_lines.append(url + ",\n")
+                    if FOOLSLIDE_START in line:
+                        ignoring_text = True
+                        for url in fs_urls:
+                            to_write_lines.append(url + ",\n")
 
-    with open("../script.js", "w") as script_file:
-        script_file.writelines(to_write_lines)
+        with open(SCRIPT_FILE_PATH, "w") as script_file:
+            script_file.writelines(to_write_lines)
+    else:
+        raise Exception("Could not find script file to read/write to.")
 
 
 def main():
