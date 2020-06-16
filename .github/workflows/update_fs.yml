@@ -5,6 +5,8 @@ name: 'Update FS'
 # on:
 #   schedule:
 #     - cron:  '0 6 * * 0'
+
+# Horrible hack to manually trigger the action.
 on:
   watch:
     types: [started]
@@ -23,7 +25,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Run the updater
-      run: 'foolslide_scraper/scraper_replacer.py'
+      run: 'python foolslide_scraper/scraper_replacer.py'
       env: 
         SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
     
