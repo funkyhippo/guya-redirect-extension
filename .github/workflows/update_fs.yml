@@ -23,7 +23,7 @@ jobs:
 
     # Runs a single command using the runners shell
     - name: Run the updater
-      run: 'foolslide_scraper/scraper.py'
+      run: 'foolslide_scraper/scraper_replacer.py'
       env: 
         SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
     
