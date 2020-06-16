@@ -1,15 +1,14 @@
 name: "Update FS"
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
-# on:
-#   schedule:
-#     - cron:  '0 6 * * 0'
+# Runs at 6am every Sunday.
+on:
+  schedule:
+    - cron: "0 6 * * 0"
 
 # Horrible hack to manually trigger the action.
-on:
-  watch:
-    types: [started]
+# on:
+#   watch:
+#     types: [started]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,7 +21,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: "12"
 
       # Install deps and run updater
       - name: Install dependencies
