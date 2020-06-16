@@ -2,9 +2,12 @@ name: 'Update FS'
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
+# on:
+#   schedule:
+#     - cron:  '0 6 * * 0'
 on:
-  schedule:
-    - cron:  '0 6 * * 0'
+  watch:
+    types: [started]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
