@@ -5,7 +5,7 @@
 import json
 import requests
 from urllib import parse
-from os import getenv
+import os
 
 
 def scrape_urls():
@@ -16,11 +16,12 @@ def scrape_urls():
     FOOLSLIDE_EXTENSION_NAME = "all.foolslide"
 
     api_key = None
-    with open(CONFIG_FILE_PATH) as f:
-        api_key = json.load(f).get("key")
-    if api_key is None:
+    if os.path().exists(CONFIG_FILE_PATH):
+        with open(CONFIG_FILE_PATH) as f:
+            api_key = json.load(f).get("key")
+    else:
         # Try grabbing from env
-        api_key = getenv("SHEETS_API_KEY")
+        api_key = os.getenv("SHEETS_API_KEY")
         if api_key is None:
             # Ya really messed up, where's your API key?
             raise Exception("Missing API key!")
