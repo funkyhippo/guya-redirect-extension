@@ -31,8 +31,11 @@ jobs:
           SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
 
       - name: Format the file using Prettier
-        uses: mikeal/npx@1.0.0
-        run: "npx prettier@2.0.5 script.js --write"
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: '12'
+        run: npm install --global prettier
+        run: prettier --write ./script.js
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v2.8.0
