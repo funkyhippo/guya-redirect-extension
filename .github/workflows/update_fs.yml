@@ -30,7 +30,11 @@ jobs:
         env:
           SHEETS_API_KEY: ${{ secrets.SHEETS_API_KEY }}
 
-      - name: Create Pull Request
+      - name: Format the file using Prettier
+        uses: mikeal/npx@1.0.0
+        run: "npx prettier@2.0.5 script.js --write"
+
+      - name: Create PR
         uses: peter-evans/create-pull-request@v2.8.0
         with:
           commit-message: "Actions: Update FS list"
