@@ -13,8 +13,6 @@ const allowed_url_list = [
 
 const tachiyomi_foolslide_list = [
   // %%FOOLSLIDE START%%
-  "Silentskys-scans.net",
-  "Storm-in-heaven.net",
   "ajianoscantrad.fr",
   "deathtollscans.net",
   "evilflowers.com",
@@ -45,7 +43,9 @@ const tachiyomi_foolslide_list = [
   "reader2.thecatscans.com",
   "rusmanga.ru",
   "sensescans.com",
+  "silentskys-scans.net",
   "smuglo.li",
+  "storm-in-heaven.net",
   "tortuga-ceviri.com",
   "tuttoanimemanga.net",
   "yuri-ism.net/slide",
