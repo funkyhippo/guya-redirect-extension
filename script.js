@@ -1,6 +1,7 @@
 const BASE_URL = "https://guya.moe";
 const FS_URL = "https://guya.moe/fs";
 const MB_URL = "https://guya.moe/mb";
+const HT_URL = "https://guya.moe/ht";
 
 const ctx = chrome || browser;
 
@@ -61,6 +62,9 @@ const override_foolslide_list = [];
 // This list is for Mangabox and proxy sites
 const mangabox_url_list = ["manganelo.com", "mangakakalot.com"];
 
+// This list is for Hitomi and proxy sites
+const hitomi_url_list = ["hitomi.la"];
+
 let updateIcon = (tabId) => {
   ctx.tabs.get(tabId, (tab) => {
     if (!ctx.runtime.lastError) {
@@ -75,7 +79,10 @@ let updateIcon = (tabId) => {
           override_foolslide_list.some((allowed_url) =>
             tab.url.includes(allowed_url)
           ) ||
-          mangabox_url_list.some((allowed_url) => tab.url.includes(allowed_url))
+          mangabox_url_list.some((allowed_url) =>
+            tab.url.includes(allowed_url)
+          ) ||
+          hitomi_url_list.some((allowed_url) => tab.url.includes(allowed_url))
         ) {
           ctx.browserAction.setIcon({ path: "logo_small.png" });
         } else {
@@ -112,6 +119,14 @@ ctx.browserAction.onClicked.addListener((tab) => {
     ctx.tabs.executeScript({
       code: `
         window.location.href = "${MB_URL}" + "/" + document.location.href;
+      `,
+    });
+  } else if (
+    hitomi_url_list.some((allowed_url) => tab.url.includes(allowed_url))
+  ) {
+    ctx.tabs.executeScript({
+      code: `
+        window.location.href = "${HT_URL}" + "/" + document.location.href;
       `,
     });
   }
