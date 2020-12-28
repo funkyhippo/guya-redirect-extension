@@ -11,6 +11,7 @@ const allowed_url_list = [
   "mangadex.org/chapter",
   "nhentai.net/g",
   "imgur.com/a",
+  "readmanhwa.com/en/webtoon",
 ];
 
 const tachiyomi_foolslide_list = [
