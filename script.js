@@ -68,9 +68,6 @@ const mangabox_url_list = ["manganelo.com", "mangakakalot.com"];
 // This list is for Hitomi and proxy sites
 const hitomi_url_list = ["hitomi.la"];
 
-// This list is for pastebin and its proxy sites
-const pastebin_url_list = ["pastebin.com"];
-
 let updateIcon = (tabId) => {
   ctx.tabs.get(tabId, (tab) => {
     if (!ctx.runtime.lastError) {
@@ -88,10 +85,7 @@ let updateIcon = (tabId) => {
           mangabox_url_list.some((allowed_url) =>
             tab.url.includes(allowed_url)
           ) ||
-          hitomi_url_list.some((allowed_url) =>
-            tab.url.includes(allowed_url)
-          ) ||
-          pastebin_url_list.some((allowed_url) => tab.url.includes(allowed_url))
+          hitomi_url_list.some((allowed_url) => tab.url.includes(allowed_url))
         ) {
           ctx.browserAction.setIcon({ path: "logo_small.png" });
         } else {
@@ -136,14 +130,6 @@ ctx.browserAction.onClicked.addListener((tab) => {
     ctx.tabs.executeScript({
       code: `
         window.location.href = "${HT_URL}" + "/" + document.location.href;
-      `,
-    });
-  } else if (
-    pastebin_url_list.some((allowed_url) => tab.url.includes(allowed_url))
-  ) {
-    ctx.tabs.executeScript({
-      code: `
-        window.location.href = "${PB_URL}" + document.location.pathname;
       `,
     });
   }
