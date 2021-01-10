@@ -2,7 +2,6 @@ const BASE_URL = "https://guya.moe";
 const FS_URL = "https://guya.moe/fs";
 const MB_URL = "https://guya.moe/mb";
 const HT_URL = "https://guya.moe/ht";
-const PB_URL = "https://guya.moe/pb";
 
 const ctx = chrome || browser;
 
