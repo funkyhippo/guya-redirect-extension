@@ -12,6 +12,7 @@ const allowed_url_list = [
   "nhentai.net/g",
   "imgur.com/a",
   "readmanhwa.com/en/webtoon",
+  "toonily.com/webtoon",
 ];
 
 const tachiyomi_foolslide_list = [

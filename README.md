@@ -17,3 +17,4 @@ It's probably also useful to enable `Allow in incognito` in the extensions detai
 - manganelo.com
 - mangakakalot.com
 - hitomi.la
+- toonily.com
