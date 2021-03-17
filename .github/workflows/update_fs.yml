@@ -40,7 +40,7 @@ jobs:
         run: prettier --write ./script.js
 
       - name: Create PR
-        uses: peter-evans/create-pull-request@v2.8.0
+        uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Actions: Update FS list"
           title: Automatic FS Update
